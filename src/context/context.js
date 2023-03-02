@@ -4,13 +4,12 @@ export const ContextProvider = createContext();
 
 export const ContextFunction = ({ children }) => {
 	const [sayHi, setSayHi] = useState('Tangina');
-
 	const [lists, setLists] = useState([]);
-
+	const [status, setStatus] = useState('Incomplete');
 	const [show, setShow] = useState(false);
-
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	const [category, setCategory] = useState('All');
 
 	const [checked, setChecked] = useState(false);
 
@@ -28,6 +27,8 @@ export const ContextFunction = ({ children }) => {
 		'11',
 		'12',
 	];
+
+	const getCategory = lists.filter((item) => item.status === category);
 
 	const addItem = (title, status) => {
 		const id = Math.floor(Math.random() * 10000);
@@ -52,6 +53,7 @@ export const ContextFunction = ({ children }) => {
 			setChecked(false);
 		}
 
+		setStatus('Incomplete');
 		handleClose();
 	};
 
@@ -61,9 +63,41 @@ export const ContextFunction = ({ children }) => {
 		setLists(filteredItem);
 	};
 
+	const changeStatus = (status) => {
+		setStatus(status);
+	};
+
+	const changeCheck = (id) => {
+		lists.map((item) => {
+			if (item.id === id) {
+				if (item.status === 'Incomplete') {
+					return (item.status = 'Completed');
+				} else {
+					return (item.status = 'Incomplete');
+				}
+			}
+		});
+
+		setChecked(!checked);
+	};
+
+	const filterStatus = (status) => {
+		if (status === 'All') {
+			console.log(lists);
+		} else {
+			const filteredItem = lists.filter((item) => item.status === status);
+
+			console.log(filteredItem);
+		}
+	};
+
 	return (
 		<ContextProvider.Provider
 			value={{
+				category,
+				setCategory,
+				filterStatus,
+				changeCheck,
 				sayHi,
 				addItem,
 				show,
@@ -74,6 +108,10 @@ export const ContextFunction = ({ children }) => {
 				removeItem,
 				setChecked,
 				checked,
+				status,
+				setStatus,
+				changeStatus,
+				getCategory,
 			}}
 		>
 			{children}

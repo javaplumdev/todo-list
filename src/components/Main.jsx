@@ -14,16 +14,16 @@ const Main = () => {
 		removeItem,
 		handleClose,
 		handleShow,
-		setChecked,
+		category,
 		checked,
+		status,
+		changeCheck,
+		changeStatus,
+		setCategory,
+		getCategory,
 	} = useContext(ContextProvider);
 
 	const [title, setTitle] = useState('');
-	const [status, setStatus] = useState('Incomplete');
-
-	const changeStatus = (status) => {
-		setStatus(status);
-	};
 
 	return (
 		<div className="main">
@@ -44,8 +44,15 @@ const Main = () => {
 							</Dropdown.Toggle>
 
 							<Dropdown.Menu>
-								<Dropdown.Item>Incomplete</Dropdown.Item>
-								<Dropdown.Item>Completed</Dropdown.Item>
+								<Dropdown.Item onClick={() => setCategory('All')}>
+									All
+								</Dropdown.Item>
+								<Dropdown.Item onClick={() => setCategory('Incomplete')}>
+									Incomplete
+								</Dropdown.Item>
+								<Dropdown.Item onClick={() => setCategory('Completed')}>
+									Completed
+								</Dropdown.Item>
 							</Dropdown.Menu>
 						</Dropdown>
 					</div>
@@ -53,43 +60,89 @@ const Main = () => {
 						className="mt-3 rounded p-3 text-white "
 						style={{ backgroundColor: '#ECEDF6' }}
 					>
-						{lists.length === 0 ? (
-							<p className="text-center text-dark">No todos</p>
-						) : (
-							lists.map((item) => {
-								return (
-									<div
-										key={item.id}
-										className="text-dark bg-white p-2 rounded d-flex justify-content-between my-2 align-items-center"
-									>
-										<div className="d-flex">
-											<input
-												type="checkbox"
-												style={{ width: '30px' }}
-												defaultChecked={checked}
-												onChange={() => setChecked(!checked)}
-											/>
-											<div className="mx-2">
-												{item.title}
-												<br></br>
-												{item.dateToday}
-											</div>
-										</div>
-										<div>
-											<button
-												className="mx-3 p-2 border-0 text-dark rounded"
-												onClick={() => removeItem(item.id)}
+						{category === 'All'
+							? lists
+									.slice()
+									.reverse()
+									.map((item) => {
+										return (
+											<div
+												key={item.id}
+												className="text-dark bg-white p-2 rounded d-flex justify-content-between my-2 align-items-center"
 											>
-												<BsTrashFill />
-											</button>
-											<button className="p-2 border-0 text-dark rounded">
-												<BsPencilFill />
-											</button>
-										</div>
-									</div>
-								);
-							})
-						)}
+												<div className="d-flex">
+													<input
+														type="checkbox"
+														style={{ width: '30px' }}
+														defaultChecked={checked}
+														onChange={() => changeCheck(item.id)}
+													/>
+													<div className="mx-2">
+														{item.status === 'Completed' ? (
+															<s>{item.title}</s>
+														) : (
+															<>{item.title}</>
+														)}
+
+														<br></br>
+														{item.dateToday}
+													</div>
+												</div>
+												<div>
+													<button
+														className="mx-3 p-2 border-0 text-dark rounded"
+														onClick={() => removeItem(item.id)}
+													>
+														<BsTrashFill />
+													</button>
+													<button className="p-2 border-0 text-dark rounded">
+														<BsPencilFill />
+													</button>
+												</div>
+											</div>
+										);
+									})
+							: getCategory
+									.slice()
+									.reverse()
+									.map((item) => {
+										return (
+											<div
+												key={item.id}
+												className="text-dark bg-white p-2 rounded d-flex justify-content-between my-2 align-items-center"
+											>
+												<div className="d-flex">
+													<input
+														type="checkbox"
+														style={{ width: '30px' }}
+														defaultChecked={checked}
+														onChange={() => changeCheck(item.id)}
+													/>
+													<div className="mx-2">
+														{item.status === 'Completed' ? (
+															<s>{item.title}</s>
+														) : (
+															<>{item.title}</>
+														)}
+
+														<br></br>
+														{item.dateToday}
+													</div>
+												</div>
+												<div>
+													<button
+														className="mx-3 p-2 border-0 text-dark rounded"
+														onClick={() => removeItem(item.id)}
+													>
+														<BsTrashFill />
+													</button>
+													<button className="p-2 border-0 text-dark rounded">
+														<BsPencilFill />
+													</button>
+												</div>
+											</div>
+										);
+									})}
 					</div>
 				</div>
 			</div>
